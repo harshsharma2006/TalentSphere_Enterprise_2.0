@@ -8,15 +8,6 @@ from core.exceptions import AuthenticationError
 from core.permissions import Role
 from ui.theme import render_badge
 
-DEMO_PERSONAS = [
-    ("Super Admin", "superadmin", "SuperAdmin@2026"),
-    ("HR Admin", "hr_admin", "HRAdmin@2026"),
-    ("College Admin", "college_admin", "CollegeAdmin@2026"),
-    ("Employee", "john_employee", "Employee@2026"),
-    ("College Student", "alex_student", "Student@2026"),
-    ("High School Student", "emma_hs", "HighSchool@2026"),
-]
-
 def render_login_page():
     """Renders the enterprise SaaS authentication portal."""
     col_l, col_center, col_r = st.columns([1, 2.2, 1])
@@ -41,7 +32,7 @@ def render_login_page():
             st.markdown("""
             <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:14px; padding:24px 28px; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);">
                 <div style="font-size:1.15rem; font-weight:700; color:#0F172A; margin-bottom:4px;">Sign In</div>
-                <div style="font-size:0.85rem; color:#64748B; margin-bottom:16px;">Enter your enterprise credentials or select a quick-login persona below.</div>
+                <div style="font-size:0.85rem; color:#64748B; margin-bottom:16px;">Enter your enterprise credentials to access your workspace.</div>
             """, unsafe_allow_html=True)
 
             with st.form("login_form"):
@@ -63,14 +54,6 @@ def render_login_page():
                         st.error(str(e))
                     except Exception as e:
                         st.error(f"Sign-in error: {e}")
-
-            # Demo Personas Quick Fill Accordion
-            with st.expander("🔑 One-Click Demo Personas Credentials", expanded=True):
-                st.caption("Click any persona credential below to test its role-specific dashboard and permissions:")
-                p_cols = st.columns(2)
-                for idx, (label, uname, default_pw) in enumerate(DEMO_PERSONAS):
-                    with p_cols[idx % 2]:
-                        st.markdown(f"**{label}**<br/><code>{uname}</code> / <code>{default_pw}</code>", unsafe_allow_html=True)
 
             st.markdown("</div>", unsafe_allow_html=True)
 

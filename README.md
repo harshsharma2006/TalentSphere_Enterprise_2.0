@@ -91,16 +91,17 @@ Access the application at `http://localhost:8501`.
 
 ---
 
-## 🔐 Default Demo Accounts
+## 🔐 Default Role Profiles
 
-| Role | Username | Password |
-|---|---|---|
-| **Super Admin** | `superadmin` | `SuperAdmin@2026` |
-| **HR Admin** | `hr_admin` | `HRAdmin@2026` |
-| **College Admin** | `college_admin` | `CollegeAdmin@2026` |
-| **Employee** | `john_employee` | `Employee@2026` |
-| **College Student** | `alex_student` | `Student@2026` |
-| **High School Student** | `emma_hs` | `HighSchool@2026` |
+Pre-configured role profiles for testing:
+- **Super Admin**: `superadmin`
+- **HR Admin**: `hr_admin`
+- **College Admin**: `college_admin`
+- **Employee**: `john_employee`
+- **College Student**: `alex_student`
+- **High School Student**: `emma_hs`
+
+> *Note: For security best practices in public environments, credentials and master passwords are maintained securely and can be reset or configured via the administration console.*
 
 ---
 
