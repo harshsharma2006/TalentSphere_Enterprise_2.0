@@ -1,7 +1,29 @@
 # TalentSphere Enterprise 2.0
 > **AI-Powered Talent Management Platform for Employee Performance and Career Growth**
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://talentsphereenterprise20-hq239uebmxwggycjex9icv.streamlit.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tests: 20 Passing](https://img.shields.io/badge/Tests-20%20Passing-success)](tests/)
+
+🌐 **Live Production Website**: [https://talentsphereenterprise20-hq239uebmxwggycjex9icv.streamlit.app/](https://talentsphereenterprise20-hq239uebmxwggycjex9icv.streamlit.app/)
+
 TalentSphere Enterprise 2.0 is an enterprise-grade, multi-tenant talent management platform developed from scratch. It unifies corporate human capital management, academic student placement readiness, AI resume & ATS diagnostics, skills assessments, and career coaching into a single light-blue + white themed SaaS architecture.
+
+---
+
+## 📸 Live Application Showcase
+
+| Employee Self-Service & Goals | AI Resume & ATS Diagnostics |
+|:---:|:---:|
+| ![Employee Self-Service](docs/screenshots/09_employee_self_service.png) | ![ATS Analyzer](docs/screenshots/05_resume_ats_analyzer.png) |
+
+| Super Admin Command Center | Workforce Directory |
+|:---:|:---:|
+| ![Super Admin](docs/screenshots/02_superadmin_dashboard.png) | ![Workforce Directory](docs/screenshots/03_workforce_directory.png) |
+
+| Recruitment & Pipeline Hub | Learning Academy |
+|:---:|:---:|
+| ![Recruitment](docs/screenshots/04_recruitment_jobs.png) | ![Learning Academy](docs/screenshots/07_learning_academy.png) |
 
 ---
 
@@ -107,4 +129,4 @@ Execute the complete pytest test suite:
 ---
 
 ## 📄 License
-Enterprise Proprietary - TalentSphere 2026.
+MIT License - see [LICENSE](LICENSE) for full details. Copyright (c) 2026 Harsh Sharma.
