@@ -1,0 +1,41 @@
+# ==========================================
+# TalentSphere Enterprise 2.0 Dependencies
+# ==========================================
+
+# Core Application Framework
+streamlit>=1.35.0
+fastapi>=0.110.0
+uvicorn>=0.28.0
+
+# Database & ORM
+SQLAlchemy>=2.0.25
+alembic>=1.13.0
+
+# Data Validation & Settings
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+
+# Data Processing & Visualization
+pandas>=2.2.0
+numpy>=1.26.0
+plotly>=5.19.0
+
+# AI/ML & Natural Language Processing
+scikit-learn>=1.4.0
+
+# Document & Resume Processing
+reportlab>=4.1.0
+pypdf>=4.1.0
+python-docx>=1.1.0
+
+# Security & Authentication
+bcrypt>=4.1.2
+python-jose>=3.3.0
+passlib>=1.7.4
+
+# Environment & Utilities
+python-dotenv>=1.0.1
+
+# Quality Assurance & Testing
+pytest>=8.1.0
+pytest-asyncio>=0.23.0

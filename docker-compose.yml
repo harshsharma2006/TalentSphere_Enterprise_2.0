@@ -1,0 +1,35 @@
+services:
+  talentsphere-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: talentsphere_enterprise_app
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=sqlite:////app/data/talentsphere_enterprise.db
+      - SECRET_KEY=production-enterprise-secret-key-replace-in-env
+      - LOG_LEVEL=INFO
+    volumes:
+      - talentsphere_data:/app/data
+      - talentsphere_uploads:/app/uploads
+      - talentsphere_logs:/app/logs
+      - talentsphere_reports:/app/reports
+    healthcheck:
+      test: ["CMD", "python", "healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  talentsphere_data:
+    driver: local
+  talentsphere_uploads:
+    driver: local
+  talentsphere_logs:
+    driver: local
+  talentsphere_reports:
+    driver: local
