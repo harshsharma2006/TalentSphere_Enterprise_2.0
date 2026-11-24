@@ -6,7 +6,13 @@ from datetime import datetime
 from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.orm import declarative_base, declared_attr
 
-Base = declarative_base()
+class CommonBase:
+    """Base model class with reload safety (extend_existing=True) for Streamlit live environments."""
+    @declared_attr
+    def __table_args__(cls):
+        return {"extend_existing": True}
+
+Base = declarative_base(cls=CommonBase)
 
 class TimestampMixin:
     """Provides created_at and updated_at datetime tracking."""
