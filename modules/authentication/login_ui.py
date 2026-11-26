@@ -55,6 +55,34 @@ def render_login_page():
                     except Exception as e:
                         st.error(f"Sign-in error: {e}")
 
+            # 1-Click Demo Login Shortcuts
+            st.markdown("<div style='margin-top: 14px;'></div>", unsafe_allow_html=True)
+            with st.expander("⚡ One-Click Demo Logins & Credentials", expanded=True):
+                st.caption("Click any role below to sign in instantly and explore its role-specific dashboard:")
+                demo_roles = [
+                    ("👔 Corporate Employee", "john_employee", "Employee@2026", "John Doe (Sr. Backend Engineer)"),
+                    ("🛡️ Super Admin", "superadmin", "SuperAdmin@2026", "Dr. Robert Vance (Governance)"),
+                    ("👥 HR Administrator", "hr_admin", "HRAdmin@2026", "Elena Rostova (Recruitment/ATS)"),
+                    ("🎓 College Student", "alex_student", "Student@2026", "Alex Mercer (Placement Portal)"),
+                    ("🏛️ College Admin", "college_admin", "CollegeAdmin@2026", "Dean Marcus Sterling (Apex Univ)"),
+                    ("🎒 High School Student", "emma_hs", "HighSchool@2026", "Emma Watson (Future Pathways)"),
+                ]
+                d_c1, d_c2 = st.columns(2)
+                for idx, (label, uname, pw, desc) in enumerate(demo_roles):
+                    target_col = d_c1 if idx % 2 == 0 else d_c2
+                    with target_col:
+                        if st.button(label, key=f"quick_login_{uname}", use_container_width=True, help=f"Username: {uname} | Password: {pw}"):
+                            try:
+                                u = authenticate(uname, pw)
+                                st.session_state["authenticated"] = True
+                                st.session_state["user"] = u
+                                st.session_state["current_role"] = u["role"]
+                                st.session_state["user_id"] = u["id"]
+                                st.rerun()
+                            except Exception as ex:
+                                st.error(str(ex))
+                        st.markdown(f"<div style='font-size:0.75rem; color:#64748B; margin-top:-4px; margin-bottom:8px;'><code>{uname}</code> / <code>{pw}</code><br/>{desc}</div>", unsafe_allow_html=True)
+
             st.markdown("</div>", unsafe_allow_html=True)
 
         with tab_register:

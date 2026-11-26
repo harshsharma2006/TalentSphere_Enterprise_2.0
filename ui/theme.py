@@ -45,23 +45,40 @@ def apply_custom_theme():
             background-color: #F8FAFC !important;
         }}
 
-        /* Header bar */
+        /* Header bar - transparent to allow sidebar toggle button */
         header[data-testid="stHeader"] {{
-            background-color: #F8FAFC !important;
+            background-color: transparent !important;
+            visibility: visible !important;
+            z-index: 99 !important;
         }}
 
-        /* Main app container */
-        .main .block-container {{
-            padding-top: 1.5rem !important;
-            padding-bottom: 3rem !important;
-            max-width: 1280px !important;
+        /* Hide Streamlit default hamburger menu and footer, but keep sidebar toggle */
+        #MainMenu {{ display: none !important; }}
+        footer {{ display: none !important; }}
+        .stDeployButton {{ display: none !important; }}
+        [data-testid="stToolbar"] {{ display: none !important; }}
+        [data-testid="stDecoration"] {{ display: none !important; }}
+
+        /* Ensure Sidebar toggle button is ALWAYS visible, elevated, and clickable */
+        [data-testid="stExpandSidebarButton"],
+        [data-testid="stSidebarCollapseButton"],
+        button[kind="header"] {{
+            visibility: visible !important;
+            display: inline-flex !important;
+            opacity: 1 !important;
+            z-index: 999999 !important;
             color: #1E293B !important;
+            background-color: #FFFFFF !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
         }}
-
-        /* Hide Streamlit default header/footer */
-        #MainMenu {{visibility: hidden;}}
-        footer {{visibility: hidden;}}
-        header {{visibility: hidden;}}
+        [data-testid="stExpandSidebarButton"]:hover,
+        [data-testid="stSidebarCollapseButton"]:hover {{
+            background-color: #EFF6FF !important;
+            color: #2563EB !important;
+            border-color: #93C5FD !important;
+        }}
 
         /* Typography - Deep Navy Contrast */
         h1, h2, h3, h4, h5, h6 {{
