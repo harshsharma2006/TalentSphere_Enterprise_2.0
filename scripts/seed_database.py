@@ -12,7 +12,9 @@ from database.session import get_db_session, init_db
 from database.models import (
     Organization, RoleModel, User, Department, Employee,
     Student, Skill, EmployeeSkill, StudentSkill,
-    Course, JobDescription, Assessment, Notification, UserNotification
+    Course, JobDescription, Assessment, Notification, UserNotification,
+    EmployeeGoal, PerformanceReview, CourseEnrollment, Certification,
+    CandidateApplication, JobMatch, CareerGoal
 )
 from core.security import hash_password
 from core.permissions import Role
@@ -243,6 +245,100 @@ def seed_enterprise_data():
                 sender_name="System Administrator"
             )
             session.add(n_obj)
+
+        # 13. Seed Employee Goals (Matching Screenshot 7: Automate CI/CD Deployments)
+        emp_john = session.query(Employee).filter_by(employee_code="EMP-1001").first()
+        if emp_john and not session.query(EmployeeGoal).filter_by(employee_id=emp_john.id).first():
+            goal_1 = EmployeeGoal(
+                employee_id=emp_john.id,
+                title="Automate CI/CD Deployments",
+                description="Migrate deployment scripts to GitHub Actions",
+                category="Technical",
+                due_date=date(2026, 12, 31),
+                status="In Progress",
+                progress_pct=50
+            )
+            session.add(goal_1)
+            session.flush()
+
+        # 14. Seed Performance Reviews (Matching Screenshot 10: 6 Completed Reviews for John Doe)
+        if emp_john and not session.query(PerformanceReview).filter_by(employee_id=emp_john.id).first():
+            for _ in range(6):
+                rev = PerformanceReview(
+                    employee_id=emp_john.id,
+                    reviewer_name="Engineering Manager",
+                    review_period="2026 Mid-Year Review",
+                    overall_rating=4.8,
+                    technical_rating=5.0,
+                    leadership_rating=4.5,
+                    communication_rating=4.8,
+                    achievements="Delivered microservices migration ahead of schedule with 99.9% uptime.",
+                    growth_areas="Expand mentoring of junior developers in cloud infrastructure."
+                )
+                session.add(rev)
+            session.flush()
+
+        # 15. Seed Course Enrollment & Certification for John Doe (Matching Screenshot 5)
+        course_docker = session.query(Course).filter_by(title="Microservices Architecture & Docker").first()
+        john_user = session.query(User).filter_by(username="john_employee").first()
+        if john_user and course_docker and not session.query(CourseEnrollment).filter_by(user_id=john_user.id, course_id=course_docker.id).first():
+            enr = CourseEnrollment(
+                course_id=course_docker.id,
+                user_id=john_user.id,
+                status="Completed",
+                progress_pct=100,
+                enrolled_at=datetime(2026, 1, 15, 10, 0),
+                completed_at=datetime(2026, 3, 20, 16, 30)
+            )
+            session.add(enr)
+            session.flush()
+
+            cert = Certification(
+                enrollment_id=enr.id,
+                certificate_code="CERT-DOCKER-2026-001",
+                certificate_name="Certified Microservices Architect",
+                issued_date=datetime(2026, 3, 20, 16, 30)
+            )
+            session.add(cert)
+            session.flush()
+
+        # 16. Seed Candidate Application & Job Match (Matching Screenshot 4: Candidate Pipeline)
+        job_hr = session.query(JobDescription).filter_by(title="Associate Talent Acquisition Specialist").first()
+        if job_hr and not session.query(CandidateApplication).filter_by(candidate_email="john.doe@talentsphere.local").first():
+            cand_app = CandidateApplication(
+                job_id=job_hr.id,
+                candidate_name="John Doe",
+                candidate_email="john.doe@talentsphere.local",
+                candidate_phone="+1 (555) 019-4821",
+                current_role="Senior Backend Engineer",
+                total_experience_years=4.5,
+                skills="Python, Docker, SQL, Kubernetes, CI/CD, Microservices",
+                status="Applied",
+                notes="Strong engineering background with interest in technical talent acquisition."
+            )
+            session.add(cand_app)
+            session.flush()
+
+            match_record = JobMatch(
+                job_id=job_hr.id,
+                application_id=cand_app.id,
+                match_score=88.0,
+                matched_skills="Communication, Sourcing, Interviewing"
+            )
+            session.add(match_record)
+            session.flush()
+
+        # 17. Seed Career Goal for John Doe (Matching Screenshot 6)
+        if john_user and not session.query(CareerGoal).filter_by(user_id=john_user.id).first():
+            cg = CareerGoal(
+                user_id=john_user.id,
+                target_role="Senior Cloud DevOps Engineer",
+                timeline="12 Months",
+                career_statement="Transition into infrastructure leadership and containerization.",
+                readiness_score=78.5
+            )
+            session.add(cg)
+            session.flush()
 
     logger.info("Enterprise database seeding completed successfully.")
 
