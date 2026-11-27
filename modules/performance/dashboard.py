@@ -21,7 +21,7 @@ def render_performance_module(current_user: dict):
         {"title": "Total Reviews", "value": len(reviews), "subtitle": "Evaluations recorded", "icon": "award", "color": THEME["primary"]},
         {"title": "Avg Org Score", "value": f"{round(sum([r['overall_score'] for r in reviews])/max(len(reviews),1), 1)} / 5.0", "subtitle": "Workforce rating", "icon": "compass", "color": THEME["success"]},
         {"title": "Completed Cycles", "value": len([r for r in reviews if r['status'] == 'COMPLETED']), "subtitle": "Finalized reviews", "icon": "shield_check", "color": THEME["dark_blue"]},
-        {"title": "Top Performers", "value": len([r for r in reviews if r['overall_score'] >= 4.5]), "subtitle": "Exceeding expectations", "icon": "users", "color": THEME["warning"]},
+        {"title": "Top Performers", "value": len([r for r in reviews if r['overall_score'] >= 4.5]), "subtitle": "Exceeding expectations", "icon": "award", "color": THEME["warning"]},
     ])
 
     st.markdown("<div style='margin-top: 1.5rem;'></div>", unsafe_allow_html=True)

@@ -230,30 +230,30 @@ def apply_custom_theme():
             background: #FFFFFF !important;
             border: 1px solid #E2E8F0 !important;
             border-radius: 10px !important;
-            padding: 1rem 1.25rem !important;
+            padding: 1.15rem 1.35rem !important;
             display: flex !important;
             flex-direction: column !important;
-            gap: 0.25rem !important;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04) !important;
-            border-left: 4px solid #2563EB !important;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
         }}
         .ts-metric-title {{
-            font-size: 0.825rem !important;
+            font-size: 0.775rem !important;
             font-weight: 700 !important;
-            color: #475569 !important;
+            color: #1E293B !important;
             text-transform: uppercase !important;
             letter-spacing: 0.05em !important;
+            margin-bottom: 0.35rem !important;
         }}
         .ts-metric-val {{
-            font-size: 1.85rem !important;
+            font-size: 2rem !important;
             font-weight: 800 !important;
             color: #0F172A !important;
-            line-height: 1.2 !important;
+            line-height: 1.15 !important;
+            margin-bottom: 0.25rem !important;
         }}
         .ts-metric-sub {{
             font-size: 0.825rem !important;
             color: #64748B !important;
-            font-weight: 500 !important;
+            font-weight: 400 !important;
         }}
 
         /* Badges */

@@ -16,7 +16,7 @@ def render_career_module(current_user: dict):
 
     paths = CareerService.get_all_career_paths()
 
-    tab1, tab2, tab3, tab4 = st.tabs(["Career Trajectories", "Skill Gap Diagnostics", "90-Day Growth Blueprint", "🤖 AI Career Advisor & Mentor"])
+    tab1, tab2, tab3 = st.tabs(["Career Trajectories", "Skill Gap Diagnostics", "AI Career Coach"])
 
     with tab1:
         st.subheader("Enterprise Career Paths")
@@ -89,7 +89,8 @@ def render_career_module(current_user: dict):
                 </div>
                 """, unsafe_allow_html=True)
 
-    with tab4:
+        st.markdown("<div style='margin-top: 2rem;'></div>", unsafe_allow_html=True)
+        st.markdown("---")
         st.subheader("🤖 AI Interactive Career Advisory Mentor")
         st.write("Receive strategic mentorship on engineering transitions, system design interviews, certifications, and executive promotion roadmaps.")
 

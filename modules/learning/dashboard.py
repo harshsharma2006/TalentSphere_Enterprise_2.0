@@ -19,7 +19,7 @@ def render_learning_module(current_user: dict):
         {"title": "Available Courses", "value": len(courses), "subtitle": "Catalog offerings", "icon": "book_open", "color": THEME["primary"]},
         {"title": "My Enrollments", "value": len(enrollments), "subtitle": "Active courses", "icon": "award", "color": THEME["dark_blue"]},
         {"title": "Completed", "value": len([e for e in enrollments if e["status"] == "COMPLETED"]), "subtitle": "Earned certifications", "icon": "shield_check", "color": THEME["success"]},
-        {"title": "In Progress", "value": len([e for e in enrollments if e["status"] != "COMPLETED"]), "subtitle": "Ongoing modules", "icon": "compass", "color": THEME["warning"]},
+        {"title": "In Progress", "value": len([e for e in enrollments if e["status"] != "COMPLETED"]), "subtitle": "Ongoing modules", "icon": "clock", "color": THEME["warning"]},
     ])
 
     st.markdown("<div style='margin-top: 1.5rem;'></div>", unsafe_allow_html=True)
