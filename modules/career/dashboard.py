@@ -9,13 +9,14 @@ from services.career_service import CareerService
 from ai_engine.career_recommender import CareerRecommender
 from ai_engine.skill_analyzer import SkillAnalyzer
 from ai_engine.ai_coach import AICareerCoach
+from ai_engine.ai_mentor import AICareerMentor
 
 def render_career_module(current_user: dict):
     page_header("Career Pathways & AI Coaching", "Explore career trajectories, assess competency gaps, and receive structured mentoring roadmaps.", "Career Growth", "blue")
 
     paths = CareerService.get_all_career_paths()
 
-    tab1, tab2, tab3 = st.tabs(["Career Trajectories", "Skill Gap Diagnostics", "AI Career Coach"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Career Trajectories", "Skill Gap Diagnostics", "90-Day Growth Blueprint", "🤖 AI Career Advisor & Mentor"])
 
     with tab1:
         st.subheader("Enterprise Career Paths")
@@ -87,3 +88,45 @@ def render_career_module(current_user: dict):
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
+
+    with tab4:
+        st.subheader("🤖 AI Interactive Career Advisory Mentor")
+        st.write("Receive strategic mentorship on engineering transitions, system design interviews, certifications, and executive promotion roadmaps.")
+
+        st.markdown("**Quick Advisory Topics:**")
+        col_q1, col_q2 = st.columns(2)
+        with col_q1:
+            if st.button("🚀 Roadmap to Cloud & DevOps", use_container_width=True):
+                st.session_state["mentor_query"] = "How do I become a Senior Cloud and DevOps Engineer?"
+            if st.button("🧠 Transition to AI / MLOps", use_container_width=True):
+                st.session_state["mentor_query"] = "What is the best roadmap to transition into AI and MLOps engineering?"
+        with col_q2:
+            if st.button("🎯 Mastering STAR Interviews", use_container_width=True):
+                st.session_state["mentor_query"] = "How should I structure behavioral and system design interview answers using STAR?"
+            if st.button("📈 Promotion & Salary Strategy", use_container_width=True):
+                st.session_state["mentor_query"] = "How do I maximize my promotion velocity and salary leveling?"
+
+        user_q = st.text_input(
+            "Ask AI Career Mentor a Custom Question",
+            value=st.session_state.get("mentor_query", "How do I prepare for a Senior Backend System Design interview?"),
+            key="mentor_text_input"
+        )
+
+        if st.button("Consult AI Mentor", type="primary", use_container_width=True):
+            st.session_state["mentor_advice"] = AICareerMentor.get_advice(user_q)
+
+        if "mentor_advice" in st.session_state:
+            advice = st.session_state["mentor_advice"]
+            st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
+            formatted_guidance = advice['guidance'].replace("\n", "<br>")
+            st.markdown(f"""
+            <div class="ts-card" style="border-left: 4px solid #2563EB;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h3 style="margin: 0; color: {THEME['dark_blue']};">{advice['title']}</h3>
+                    <span class="ts-badge ts-badge-blue">{advice['category']}</span>
+                </div>
+                <div style="font-size: 0.95rem; line-height: 1.7; color: #1E293B;">
+                    {formatted_guidance}
+                </div>
+            </div>
+            """, unsafe_allow_html=True)

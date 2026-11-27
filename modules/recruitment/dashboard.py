@@ -1,6 +1,6 @@
 """
 TalentSphere Enterprise 2.0 - Recruitment & Pipeline Module
-Job Requisitions, Candidate Applications, Pipeline Management, and AI Match Scoring.
+Job Requisitions, Candidate Applications, Pipeline Management, AI Match Scoring, and Requisition Generation.
 """
 
 import streamlit as st
@@ -9,6 +9,7 @@ from ui.theme import THEME
 from ui.components import page_header, stat_row, metric_card, empty_state
 from services.recruitment_service import RecruitmentService
 from core.permissions import Role
+from ai_engine.job_generator import JobRequisitionGenerator
 
 def render_recruitment_module(current_user: dict):
     is_recruiter = current_user.get("role") in [Role.SUPER_ADMIN.value, Role.HR_ADMIN.value]
@@ -83,19 +84,55 @@ def render_recruiter_view(current_user: dict):
 
     with tab3:
         st.subheader("Create New Job Requisition")
+
+        with st.expander("✨ AI Job Requisition Copilot (Auto-Generate Requirements & Salary Benchmark)", expanded=True):
+            col_ai1, col_ai2, col_ai3 = st.columns([2, 1, 1])
+            with col_ai1:
+                ai_role_track = st.selectbox(
+                    "Target Role Family",
+                    ["Software / Backend Engineering", "AI / Machine Learning", "Cloud DevOps & SRE", "Talent Acquisition / HR"],
+                    key="ai_role_track_select"
+                )
+            with col_ai2:
+                ai_seniority = st.selectbox(
+                    "Seniority Level",
+                    ["Junior / Associate", "Senior", "Lead / Principal"],
+                    index=1,
+                    key="ai_seniority_select"
+                )
+            with col_ai3:
+                st.markdown("<div style='margin-top: 1.8rem;'></div>", unsafe_allow_html=True)
+                if st.button("⚡ Generate with AI", use_container_width=True):
+                    gen_spec = JobRequisitionGenerator.generate_job_spec(ai_role_track, seniority=ai_seniority)
+                    st.session_state["gen_job_spec"] = gen_spec
+                    st.success("Requisition generated! Review and publish below.")
+
+        gen_spec = st.session_state.get("gen_job_spec", {})
+        if gen_spec:
+            stat_row([
+                {"title": "Target Level", "value": gen_spec["seniority"], "subtitle": f"{gen_spec['experience_required']} Years Required", "icon": "briefcase", "color": THEME["primary"]},
+                {"title": "Salary Benchmark", "value": f"${int(gen_spec['min_salary']):,} - ${int(gen_spec['max_salary']):,}", "subtitle": "Annual compensation band", "icon": "award", "color": THEME["success"]}
+            ])
+            st.markdown("<div style='margin-top: 1rem;'></div>", unsafe_allow_html=True)
+
+        default_title = gen_spec.get("title", "")
+        default_dept = "Engineering" if "Engineer" in default_title or "DevOps" in default_title or "ML" in default_title else "Human Resources"
+        default_skills = gen_spec.get("required_skills", "Python, Docker, AWS, Kubernetes")
+        default_desc = gen_spec.get("description", "Lead enterprise cloud modernization projects, architect microservices...")
+
         with st.form("create_job_form"):
             col1, col2 = st.columns(2)
             with col1:
-                title = st.text_input("Job Title*", placeholder="e.g. Senior Cloud Architect")
-                dept = st.text_input("Department*", placeholder="e.g. Cloud Operations")
+                title = st.text_input("Job Title*", value=default_title, placeholder="e.g. Senior Backend Engineer")
+                dept = st.text_input("Department*", value=default_dept, placeholder="e.g. Engineering")
                 loc = st.selectbox("Location", ["Remote", "Hybrid - New York", "Hybrid - San Francisco", "On-Site"])
             with col2:
                 job_type = st.selectbox("Job Type", ["Full-Time", "Contract", "Internship", "Part-Time"])
-                exp_level = st.selectbox("Experience Level", ["Entry-Level", "Mid-Level", "Senior", "Lead / Staff"])
-                skills_raw = st.text_input("Required Skills (comma separated)", "Python, Docker, AWS, Kubernetes")
+                exp_level = st.selectbox("Experience Level", ["Senior", "Mid-Level", "Entry-Level", "Lead / Staff"])
+                skills_raw = st.text_input("Required Skills (comma separated)", value=default_skills)
 
-            desc = st.text_area("Job Description", "Lead enterprise cloud modernization projects, architect Kubernetes clusters...")
-            reqs = st.text_area("Requirements & Qualifications", "5+ years of software development experience, BS/MS in Computer Science...")
+            desc = st.text_area("Job Description", value=default_desc, height=120)
+            reqs = st.text_area("Requirements & Qualifications", "5+ years of software development experience, BS/MS in Computer Science or equivalent practical experience.")
 
             submit_job = st.form_submit_button("Publish Job Requisition", use_container_width=True)
             if submit_job:
