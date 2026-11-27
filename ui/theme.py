@@ -49,15 +49,24 @@ def apply_custom_theme():
         header[data-testid="stHeader"] {{
             background-color: transparent !important;
             visibility: visible !important;
-            z-index: 99 !important;
+            z-index: 99999 !important;
+            display: flex !important;
         }}
 
-        /* Hide Streamlit default hamburger menu and footer, but keep sidebar toggle */
+        /* Hide Streamlit status widget, deploy button, and hamburger menu, but KEEP toolbar container and expand button */
         #MainMenu {{ display: none !important; }}
         footer {{ display: none !important; }}
         .stDeployButton {{ display: none !important; }}
-        [data-testid="stToolbar"] {{ display: none !important; }}
         [data-testid="stDecoration"] {{ display: none !important; }}
+        [data-testid="stStatusWidget"] {{ display: none !important; }}
+        header [data-testid="stToolbarActions"] {{ display: none !important; }}
+
+        /* Toolbar container transparent and visible so expand button shows */
+        [data-testid="stToolbar"] {{
+            background: transparent !important;
+            visibility: visible !important;
+            display: flex !important;
+        }}
 
         /* Ensure Sidebar toggle / expand button is ALWAYS visible, elevated, and clickable */
         [data-testid="stSidebarCollapsedControl"],
@@ -65,7 +74,11 @@ def apply_custom_theme():
         [data-testid="collapsedControl"],
         [data-testid="stSidebarCollapseButton"],
         header [data-testid="stSidebarCollapsedControl"],
+        header [data-testid="stExpandSidebarButton"],
+        header [data-testid="stToolbar"] [data-testid="stExpandSidebarButton"],
         div[data-testid="stSidebarCollapsedControl"] button,
+        button[aria-label="Expand sidebar"],
+        button[aria-label="Close sidebar"],
         button[kind="header"] {{
             visibility: visible !important;
             display: inline-flex !important;
@@ -76,10 +89,13 @@ def apply_custom_theme():
             border: 1px solid #CBD5E1 !important;
             border-radius: 8px !important;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
+            cursor: pointer !important;
         }}
         [data-testid="stSidebarCollapsedControl"]:hover,
         [data-testid="stExpandSidebarButton"]:hover,
-        [data-testid="stSidebarCollapseButton"]:hover {{
+        [data-testid="stSidebarCollapseButton"]:hover,
+        button[aria-label="Expand sidebar"]:hover,
+        button[aria-label="Close sidebar"]:hover {{
             background-color: #EFF6FF !important;
             color: #2563EB !important;
             border-color: #93C5FD !important;
@@ -338,6 +354,26 @@ def apply_custom_theme():
     </style>
     """
     st.markdown(custom_css, unsafe_allow_html=True)
+
+    # Automatic expansion helper if sidebar is collapsed by responsive breakpoint
+    import streamlit.components.v1 as components
+    components.html("""
+    <script>
+    function ensureSidebarOpen() {
+        try {
+            const pDoc = window.parent.document;
+            const sidebar = pDoc.querySelector('section[data-testid="stSidebar"]');
+            if (sidebar && sidebar.getAttribute('data-collapsed') === 'true') {
+                const btn = pDoc.querySelector('[data-testid="stExpandSidebarButton"], [data-testid="stSidebarCollapsedControl"] button, button[aria-label="Expand sidebar"]');
+                if (btn) btn.click();
+            }
+        } catch(e) {}
+    }
+    setTimeout(ensureSidebarOpen, 150);
+    setTimeout(ensureSidebarOpen, 600);
+    setTimeout(ensureSidebarOpen, 1500);
+    </script>
+    """, height=0, width=0)
 
 def render_badge(text: str, badge_type: str = "blue") -> str:
     """Renders a styled HTML badge."""
