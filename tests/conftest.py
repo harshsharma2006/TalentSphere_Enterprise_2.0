@@ -19,8 +19,10 @@ from core.permissions import Role
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_database():
-    """Ensure all database schema tables exist before running tests."""
+    """Ensure all database schema tables exist and enterprise seed data is loaded."""
     init_db()
+    from scripts.seed_database import seed_enterprise_data
+    seed_enterprise_data()
     yield
 
 @pytest.fixture

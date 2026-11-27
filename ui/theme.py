@@ -59,9 +59,13 @@ def apply_custom_theme():
         [data-testid="stToolbar"] {{ display: none !important; }}
         [data-testid="stDecoration"] {{ display: none !important; }}
 
-        /* Ensure Sidebar toggle button is ALWAYS visible, elevated, and clickable */
+        /* Ensure Sidebar toggle / expand button is ALWAYS visible, elevated, and clickable */
+        [data-testid="stSidebarCollapsedControl"],
         [data-testid="stExpandSidebarButton"],
+        [data-testid="collapsedControl"],
         [data-testid="stSidebarCollapseButton"],
+        header [data-testid="stSidebarCollapsedControl"],
+        div[data-testid="stSidebarCollapsedControl"] button,
         button[kind="header"] {{
             visibility: visible !important;
             display: inline-flex !important;
@@ -71,8 +75,9 @@ def apply_custom_theme():
             background-color: #FFFFFF !important;
             border: 1px solid #CBD5E1 !important;
             border-radius: 8px !important;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
         }}
+        [data-testid="stSidebarCollapsedControl"]:hover,
         [data-testid="stExpandSidebarButton"]:hover,
         [data-testid="stSidebarCollapseButton"]:hover {{
             background-color: #EFF6FF !important;
@@ -131,8 +136,13 @@ def apply_custom_theme():
         section[data-testid="stSidebar"] div[data-testid="stRadio"] label:hover p {{
             color: #2563EB !important;
         }}
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label[data-checked="true"],
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) {{
+            background-color: #EFF6FF !important;
+        }}
         section[data-testid="stSidebar"] div[data-testid="stRadio"] label[data-checked="true"] p,
-        section[data-testid="stSidebar"] div[data-testid="stRadio"] [aria-checked="true"] + div p {{
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] [aria-checked="true"] + div p,
+        section[data-testid="stSidebar"] div[data-testid="stRadio"] label:has(input:checked) p {{
             color: #2563EB !important;
             font-weight: 700 !important;
         }}

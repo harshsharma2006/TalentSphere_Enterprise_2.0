@@ -37,9 +37,14 @@ st.set_page_config(
 apply_custom_theme()
 
 # Ensure Database Tables Exist & Auto-Seed on Fresh Cloud Deployment
-init_db()
-from scripts.seed_database import seed_enterprise_data
-seed_enterprise_data()
+@st.cache_resource
+def ensure_database_initialized():
+    init_db()
+    from scripts.seed_database import seed_enterprise_data
+    seed_enterprise_data()
+    return True
+
+ensure_database_initialized()
 
 # Session State Initialization
 if "authenticated" not in st.session_state:

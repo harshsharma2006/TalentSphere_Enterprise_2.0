@@ -6,10 +6,83 @@ import streamlit as st
 from services.auth_service import authenticate, register_user, force_password_update
 from core.exceptions import AuthenticationError
 from core.permissions import Role
-from ui.theme import render_badge
+from ui.theme import THEME, render_badge
+from ui.icons import get_icon_svg
+
+def render_login_sidebar():
+    """Keeps sidebar active and populated on the login view to prevent premature collapse."""
+    with st.sidebar:
+        st.markdown(f"""
+        <div style="display: flex; align-items: center; gap: 0.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid {THEME['border']};">
+            <div style="background: linear-gradient(135deg, {THEME['primary']} 0%, {THEME['dark_blue']} 100%); width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                {get_icon_svg('shield_check', size=24, color='#FFFFFF')}
+            </div>
+            <div>
+                <div style="font-weight: 700; font-size: 1.05rem; color: {THEME['dark_blue']}; line-height: 1.2;">TalentSphere</div>
+                <div style="font-size: 0.725rem; color: {THEME['secondary']}; font-weight: 500; letter-spacing: 0.05em;">ENTERPRISE 2.0</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown(f"""
+        <div style="margin: 1.25rem 0; padding: 0.85rem; background: {THEME['light_blue']}; border-radius: 8px; border: 1px solid #BFDBFE;">
+            <div style="font-weight: 600; font-size: 0.875rem; color: #1E40AF; margin-bottom: 0.35rem;">🔐 Enterprise Portal</div>
+            <div style="font-size: 0.8rem; color: #475569; line-height: 1.4;">
+                Sign in with enterprise credentials or use one-click demo logins below.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown(f"""
+        <div style="font-size: 0.75rem; font-weight: 600; color: {THEME['secondary']}; text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.05em;">NAVIGATION</div>
+        <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.9rem; color: #64748B;">
+            <div style="padding: 0.4rem 0.6rem; border-radius: 6px; background: #EFF6FF; color: #1D4ED8; font-weight: 700;">🔘 Sign In Portal</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Command Center</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Workforce Directory</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Academic & Students</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Recruitment & Jobs</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Resume & ATS AI</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Performance Reviews</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Learning Academy</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Career Pathways</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Skills Assessment</div>
+            <div style="padding: 0.4rem 0.6rem; color: #334155;">⚪ Executive Reports</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown(f"""<div style="font-size: 0.75rem; font-weight: 600; color: {THEME['secondary']}; text-transform: uppercase; margin-top: 1.25rem; margin-bottom: 0.5rem; letter-spacing: 0.05em;">QUICK 1-CLICK DEMO</div>""", unsafe_allow_html=True)
+        if st.button("🛡️ Super Admin (Dr. Vance)", key="sb_quick_superadmin", use_container_width=True):
+            user = authenticate("superadmin", "SuperAdmin@2026")
+            st.session_state["authenticated"] = True
+            st.session_state["user"] = user
+            st.session_state["current_role"] = user["role"]
+            st.session_state["user_id"] = user["id"]
+            st.session_state["nav_selection"] = "admin"
+            st.rerun()
+
+        if st.button("👔 Employee (John Doe)", key="sb_quick_employee", use_container_width=True):
+            user = authenticate("john_employee", "Employee@2026")
+            st.session_state["authenticated"] = True
+            st.session_state["user"] = user
+            st.session_state["current_role"] = user["role"]
+            st.session_state["user_id"] = user["id"]
+            st.session_state["nav_selection"] = "workforce"
+            st.rerun()
+
+        st.markdown("<div style='margin-top: 1.5rem;'></div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='border-top: 1px solid {THEME['border']}; padding-top: 1rem;'></div>", unsafe_allow_html=True)
+
+        st.markdown(f"""
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: {THEME['success']};"></div>
+            <div style="font-size: 0.75rem; color: {THEME['secondary']};">System: <strong>Operational</strong></div>
+        </div>
+        """, unsafe_allow_html=True)
 
 def render_login_page():
     """Renders the enterprise SaaS authentication portal."""
+    render_login_sidebar()
+
     col_l, col_center, col_r = st.columns([1, 2.2, 1])
 
     with col_center:
